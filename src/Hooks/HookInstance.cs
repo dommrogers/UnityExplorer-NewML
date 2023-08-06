@@ -27,6 +27,7 @@ namespace UnityExplorer.Hooks
 
         public MethodInfo TargetMethod;
         public string PatchSourceCode;
+		public string prefer;
 
         readonly string signature;
         PatchProcessor patchProcessor;
@@ -36,10 +37,11 @@ namespace UnityExplorer.Hooks
         MethodInfo finalizer;
         MethodInfo transpiler;
 
-        public HookInstance(MethodInfo targetMethod)
+        public HookInstance(MethodInfo targetMethod, string prefer = "Postfix")
         {
             this.TargetMethod = targetMethod;
-            this.signature = TargetMethod.FullDescription();
+			this.prefer = prefer;
+            this.signature = this.prefer.ToUpper() + " | " + TargetMethod.FullDescription();
 
             GenerateDefaultPatchSourceCode(targetMethod);
 
@@ -85,11 +87,11 @@ namespace UnityExplorer.Hooks
                 // Create the harmony patches as defined
 
                 postfix = patchClass.GetMethod("Postfix", ReflectionUtility.FLAGS);
-                if (postfix != null)
+                if (postfix != null && prefer == "Postfix")
                     patchProcessor.AddPostfix(new HarmonyMethod(postfix));
 
                 prefix = patchClass.GetMethod("Prefix", ReflectionUtility.FLAGS);
-                if (prefix != null)
+                if (prefix != null && prefer == "Prefix")
                     patchProcessor.AddPrefix(new HarmonyMethod(prefix));
 
                 finalizer = patchClass.GetMethod("Finalizer", ReflectionUtility.FLAGS);
@@ -138,7 +140,13 @@ namespace UnityExplorer.Hooks
         {
             StringBuilder codeBuilder = new();
 
-            codeBuilder.Append("static void Postfix(");
+			if (prefer == "Prefix")
+			{
+				codeBuilder.Append("static void Prefix(");
+			} else
+			{
+				codeBuilder.Append("static void Postfix(");
+			}
 
             bool isStatic = targetMethod.IsStatic;
 
@@ -147,7 +155,7 @@ namespace UnityExplorer.Hooks
             if (!isStatic)
                 arguments.Add($"{FullDescriptionClean(targetMethod.DeclaringType)} __instance");
 
-            if (targetMethod.ReturnType != typeof(void))
+            if (targetMethod.ReturnType != typeof(void) && prefer != "Prefix")
                 arguments.Add($"{FullDescriptionClean(targetMethod.ReturnType)} __result");
 
             ParameterInfo[] parameters = targetMethod.GetParameters();
@@ -189,7 +197,7 @@ namespace UnityExplorer.Hooks
                 paramIdx++;
             }
 
-            if (targetMethod.ReturnType != typeof(void))
+            if (targetMethod.ReturnType != typeof(void) && prefer != "Prefix")
             {
                 codeBuilder.Append("       sb.Append(\"- Return value: \")");
                 if (targetMethod.ReturnType.IsValueType)

@@ -1,5 +1,5 @@
 # ----------- MelonLoader IL2CPP Unhollower (net6) -----------
-dotnet build src/UnityExplorer.sln -c Release_ML_Cpp_net6
+<# dotnet build src/UnityExplorer.sln -c Release_ML_Cpp_net6
 $Path = "Release\UnityExplorer.MelonLoader.IL2CPP.net6preview"
 # ILRepack
 lib/ILRepack.exe /target:library /lib:lib/net6 /lib:lib/unhollowed /lib:$Path /internalize /out:$Path/UnityExplorer.ML.IL2CPP.net6preview.dll $Path/UnityExplorer.ML.IL2CPP.net6preview.dll $Path/mcs.dll 
@@ -15,13 +15,14 @@ New-Item -Path "$Path" -Name "UserLibs" -ItemType "directory" -Force
 Move-Item -Path $Path/UniverseLib.IL2CPP.Unhollower.dll -Destination $Path/UserLibs -Force
 # (create zip archive)
 Remove-Item $Path/../UnityExplorer.MelonLoader.IL2CPP.net6preview.zip -ErrorAction SilentlyContinue
-7z a $Path/../UnityExplorer.MelonLoader.IL2CPP.net6preview.zip .\$Path\*
+C:/Users/Dom/7z.exe a $Path/../UnityExplorer.MelonLoader.IL2CPP.net6preview.zip .\$Path\* #>
 
 # ----------- MelonLoader IL2CPP Interop (net6) -----------
 dotnet build src/UnityExplorer.sln -c Release_ML_Cpp_net6_interop
 $Path = "Release\UnityExplorer.MelonLoader.IL2CPP.net6preview.interop"
 # ILRepack
-lib/ILRepack.exe /target:library /lib:lib/net6 /lib:lib/interop /lib:$Path /internalize /out:$Path/UnityExplorer.ML.IL2CPP.net6preview.interop.dll $Path/UnityExplorer.ML.IL2CPP.net6preview.interop.dll $Path/mcs.dll 
+#lib/ILRepack.exe /target:library /lib:lib/net6 /lib:lib/interop /lib:$Path /internalize /out:$Path/UnityExplorer.ML.IL2CPP.net6preview.interop.dll $Path/UnityExplorer.ML.IL2CPP.net6preview.interop.dll $Path/mcs.dll
+lib/ILRepack.exe /target:library /lib:lib/net6 /lib:$Path /internalize /out:Release/UnityExplorer.TLD.dll $Path/UnityExplorer.ML.IL2CPP.net6preview.interop.dll $Path/mcs.dll $Path/UniverseLib.IL2CPP.Interop.ML.dll
 # (cleanup and move files)
 Remove-Item $Path/UnityExplorer.ML.IL2CPP.net6preview.interop.deps.json
 Remove-Item $Path/Tomlet.dll
@@ -30,15 +31,15 @@ Remove-Item $Path/Iced.dll
 Remove-Item $Path/Il2CppInterop.Common.dll
 Remove-Item $Path/Il2CppInterop.Runtime.dll
 Remove-Item $Path/Microsoft.Extensions.Logging.Abstractions.dll
-New-Item -Path "$Path" -Name "Mods" -ItemType "directory" -Force
-Move-Item -Path $Path/UnityExplorer.ML.IL2CPP.net6preview.interop.dll -Destination $Path/Mods -Force
-New-Item -Path "$Path" -Name "UserLibs" -ItemType "directory" -Force
-Move-Item -Path $Path/UniverseLib.IL2CPP.Interop.ML.dll -Destination $Path/UserLibs -Force
+#New-Item -Path "$Path" -Name "Mods" -ItemType "directory" -Force
+#Move-Item -Path UnityExplorer.ML.TLD.dll -Destination $Path/Mods -Force
+#New-Item -Path "$Path" -Name "UserLibs" -ItemType "directory" -Force
+#Move-Item -Path $Path/UniverseLib.IL2CPP.Interop.ML.dll -Destination $Path/UserLibs -Force
 # (create zip archive)
-Remove-Item $Path/../UnityExplorer.MelonLoader.IL2CPP.net6preview.interop.zip -ErrorAction SilentlyContinue
-7z a $Path/../UnityExplorer.MelonLoader.IL2CPP.net6preview.interop.zip .\$Path\*
+#Remove-Item $Path/../UnityExplorer.MelonLoader.IL2CPP.net6preview.interop.zip -ErrorAction SilentlyContinue
+#C:/Users/Dom/7z.exe a $Path/../UnityExplorer.ML.TLD.zip .\$Path\Mods\*
 
-# ----------- MelonLoader IL2CPP (net472) -----------
+<# # ----------- MelonLoader IL2CPP (net472) -----------
 dotnet build src/UnityExplorer.sln -c Release_ML_Cpp_net472
 $Path = "Release/UnityExplorer.MelonLoader.IL2CPP"
 # ILRepack
@@ -54,7 +55,7 @@ New-Item -Path "$Path" -Name "UserLibs" -ItemType "directory" -Force
 Move-Item -Path $Path/UniverseLib.IL2CPP.Unhollower.dll -Destination $Path/UserLibs -Force
 # (create zip archive)
 Remove-Item $Path/../UnityExplorer.MelonLoader.IL2CPP.zip -ErrorAction SilentlyContinue
-7z a $Path/../UnityExplorer.MelonLoader.IL2CPP.zip .\$Path\*
+C:/Users/Dom/7z.exe a $Path/../UnityExplorer.MelonLoader.IL2CPP.zip .\$Path\*
 
 # ----------- MelonLoader Mono -----------
 dotnet build src/UnityExplorer.sln -c Release_ML_Mono
@@ -70,7 +71,7 @@ New-Item -Path "$Path" -Name "UserLibs" -ItemType "directory" -Force
 Move-Item -Path $Path/UniverseLib.Mono.dll -Destination $Path/UserLibs -Force
 # (create zip archive)
 Remove-Item $Path/../UnityExplorer.MelonLoader.Mono.zip -ErrorAction SilentlyContinue
-7z a $Path/../UnityExplorer.MelonLoader.Mono.zip .\$Path\*
+C:/Users/Dom/7z.exe a $Path/../UnityExplorer.MelonLoader.Mono.zip .\$Path\*
 
 # ----------- BepInEx IL2CPP -----------
 dotnet build src/UnityExplorer.sln -c Release_BIE_Cpp
@@ -88,7 +89,7 @@ Move-Item -Path $Path/UnityExplorer.BIE.IL2CPP.dll -Destination $Path/plugins/si
 Move-Item -Path $Path/UniverseLib.IL2CPP.Unhollower.dll -Destination $Path/plugins/sinai-dev-UnityExplorer -Force
 # (create zip archive)
 Remove-Item $Path/../UnityExplorer.BepInEx.IL2CPP.zip -ErrorAction SilentlyContinue
-7z a $Path/../UnityExplorer.BepInEx.IL2CPP.zip .\$Path\*
+C:/Users/Dom/7z.exe a $Path/../UnityExplorer.BepInEx.IL2CPP.zip .\$Path\*
 
 # ----------- BepInEx IL2CPP CoreCLR -----------
 dotnet build src/UnityExplorer.sln -c Release_BIE_CoreCLR
@@ -109,7 +110,7 @@ Move-Item -Path $Path/UnityExplorer.BIE.IL2CPP.CoreCLR.dll -Destination $Path/pl
 Move-Item -Path $Path/UniverseLib.IL2CPP.Interop.dll -Destination $Path/plugins/sinai-dev-UnityExplorer -Force
 # (create zip archive)
 Remove-Item $Path/../UnityExplorer.BepInEx.IL2CPP.CoreCLR.zip -ErrorAction SilentlyContinue
-7z a $Path/../UnityExplorer.BepInEx.IL2CPP.CoreCLR.zip .\$Path\*
+C:/Users/Dom/7z.exe a $Path/../UnityExplorer.BepInEx.IL2CPP.CoreCLR.zip .\$Path\*
 
 # ----------- BepInEx 5 Mono -----------
 dotnet build src/UnityExplorer.sln -c Release_BIE5_Mono
@@ -125,7 +126,7 @@ Move-Item -Path $Path/UnityExplorer.BIE5.Mono.dll -Destination $Path/plugins/sin
 Move-Item -Path $Path/UniverseLib.Mono.dll -Destination $Path/plugins/sinai-dev-UnityExplorer -Force
 # (create zip archive)
 Remove-Item $Path/../UnityExplorer.BepInEx5.Mono.zip -ErrorAction SilentlyContinue
-7z a $Path/../UnityExplorer.BepInEx5.Mono.zip .\$Path\*
+C:/Users/Dom/7z.exe a $Path/../UnityExplorer.BepInEx5.Mono.zip .\$Path\*
 
 # ----------- BepInEx 6 Mono -----------
 dotnet build src/UnityExplorer.sln -c Release_BIE6_Mono
@@ -141,7 +142,7 @@ Move-Item -Path $Path/UnityExplorer.BIE6.Mono.dll -Destination $Path/plugins/sin
 Move-Item -Path $Path/UniverseLib.Mono.dll -Destination $Path/plugins/sinai-dev-UnityExplorer -Force
 # (create zip archive)
 Remove-Item $Path/../UnityExplorer.BepInEx6.Mono.zip -ErrorAction SilentlyContinue
-7z a $Path/../UnityExplorer.BepInEx6.Mono.zip .\$Path\*
+C:/Users/Dom/7z.exe a $Path/../UnityExplorer.BepInEx6.Mono.zip .\$Path\*
 
 # ----------- Standalone Mono -----------
 dotnet build src/UnityExplorer.sln -c Release_STANDALONE_Mono
@@ -152,7 +153,7 @@ lib/ILRepack.exe /target:library /lib:lib/net35 /lib:$Path /internalize /out:$Pa
 Remove-Item $Path/Tomlet.dll
 Remove-Item $Path/mcs.dll
 Remove-Item $Path/../UnityExplorer.Standalone.Mono.zip -ErrorAction SilentlyContinue
-7z a $Path/../UnityExplorer.Standalone.Mono.zip .\$Path\*
+C:/Users/Dom/7z.exe a $Path/../UnityExplorer.Standalone.Mono.zip .\$Path\*
 
 # ----------- Standalone IL2CPP -----------
 dotnet build src/UnityExplorer.sln -c Release_STANDALONE_Cpp
@@ -165,7 +166,7 @@ Remove-Item $Path/mcs.dll
 Remove-Item $Path/Iced.dll
 Remove-Item $Path/UnhollowerBaseLib.dll
 Remove-Item $Path/../UnityExplorer.Standalone.IL2CPP.zip -ErrorAction SilentlyContinue
-7z a $Path/../UnityExplorer.Standalone.IL2CPP.zip .\$Path\*
+C:/Users/Dom/7z.exe a $Path/../UnityExplorer.Standalone.IL2CPP.zip .\$Path\*
 
 # ----------- Editor (mono) -----------
 $Path1 = "Release/UnityExplorer.Standalone.Mono"
@@ -173,4 +174,4 @@ $Path2 = "UnityEditorPackage/Runtime"
 Copy-Item $Path1/UnityExplorer.STANDALONE.Mono.dll -Destination $Path2
 Copy-Item $Path1/UniverseLib.Mono.dll -Destination $Path2
 Remove-Item Release/UnityExplorer.Editor.zip -ErrorAction SilentlyContinue
-7z a Release/UnityExplorer.Editor.zip .\UnityEditorPackage\*
+C:/Users/Dom/7z.exe a Release/UnityExplorer.Editor.zip .\UnityEditorPackage\* #>

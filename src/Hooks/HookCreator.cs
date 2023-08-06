@@ -104,29 +104,50 @@ namespace UnityExplorer.Hooks
             AddHooksScrollPool.UIRoot.SetActive(true);
         }
 
-        public static void AddHookClicked(int index)
-        {
-            if (index >= filteredEligibleMethods.Count)
-                return;
+		public static void AddPrefixHookClicked(int index)
+		{
+			if (index >= filteredEligibleMethods.Count)
+				return;
 
-            MethodInfo method = filteredEligibleMethods[index];
-            if (!method.IsGenericMethod && HookList.hookedSignatures.Contains(method.FullDescription()))
-            {
-                ExplorerCore.Log($"Non-generic methods can only be hooked once.");
-                return;
-            }
-            else if (method.IsGenericMethod)
-            {
-                pendingGenericMethod = method;
-                HookManagerPanel.genericArgsHandler.Show(OnGenericMethodChosen, OnGenericMethodCancel, method);
-                HookManagerPanel.Instance.SetPage(HookManagerPanel.Pages.GenericArgsSelector);
-                return;
-            }
+			MethodInfo method = filteredEligibleMethods[index];
+			if (!method.IsGenericMethod && HookList.hookedSignatures.Contains(method.FullDescription()))
+			{
+				ExplorerCore.Log($"Non-generic methods can only be hooked once.");
+				return;
+			}
+			else if (method.IsGenericMethod)
+			{
+				pendingGenericMethod = method;
+				HookManagerPanel.genericArgsHandler.Show(OnGenericMethodChosen, OnGenericMethodCancel, method);
+				HookManagerPanel.Instance.SetPage(HookManagerPanel.Pages.GenericArgsSelector);
+				return;
+			}
 
-            AddHook(filteredEligibleMethods[index]);
-        }
+			AddHook(filteredEligibleMethods[index],"Prefix");
+		}
+		public static void AddPostfixHookClicked(int index)
+		{
+			if (index >= filteredEligibleMethods.Count)
+				return;
 
-        static void OnGenericMethodChosen(Type[] arguments)
+			MethodInfo method = filteredEligibleMethods[index];
+			if (!method.IsGenericMethod && HookList.hookedSignatures.Contains(method.FullDescription()))
+			{
+				ExplorerCore.Log($"Non-generic methods can only be hooked once.");
+				return;
+			}
+			else if (method.IsGenericMethod)
+			{
+				pendingGenericMethod = method;
+				HookManagerPanel.genericArgsHandler.Show(OnGenericMethodChosen, OnGenericMethodCancel, method);
+				HookManagerPanel.Instance.SetPage(HookManagerPanel.Pages.GenericArgsSelector);
+				return;
+			}
+
+			AddHook(filteredEligibleMethods[index],"Postfix");
+		}
+
+		static void OnGenericMethodChosen(Type[] arguments)
         {
             MethodInfo generic = pendingGenericMethod.MakeGenericMethod(arguments);
             AddHook(generic);
@@ -138,18 +159,18 @@ namespace UnityExplorer.Hooks
             HookManagerPanel.Instance.SetPage(HookManagerPanel.Pages.ClassMethodSelector);
         }
 
-        public static void AddHook(MethodInfo method)
+        public static void AddHook(MethodInfo method, string prefer = "Postfix")
         {
             HookManagerPanel.Instance.SetPage(HookManagerPanel.Pages.ClassMethodSelector);
 
-            string sig = method.FullDescription();
+            string sig = method.FullDescription()+prefer;
             if (HookList.hookedSignatures.Contains(sig))
             {
                 ExplorerCore.LogWarning($"Method is already hooked!");
                 return;
             }
 
-            HookInstance hook = new(method);
+            HookInstance hook = new(method, prefer);
             HookList.hookedSignatures.Add(sig);
             HookList.currentHooks.Add(sig, hook);
 

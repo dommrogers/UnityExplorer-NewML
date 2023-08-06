@@ -1,6 +1,9 @@
-﻿using UnityExplorer.UI.Panels;
+﻿using Il2Cpp;
+using Il2CppInterop.Runtime;
+using UnityExplorer.UI.Panels;
 using UniverseLib.UI;
 using UniverseLib.UI.Models;
+
 
 namespace UnityExplorer.UI.Widgets
 {
@@ -198,12 +201,18 @@ namespace UnityExplorer.UI.Widgets
             UpdateGameObjectInfo(false, true);
         }
 
-        void OnCopyClicked()
-        {
-            ClipboardPanel.Copy(this.Target);
-        }
+		void OnCopyClicked()
+		{
+			ClipboardPanel.Copy(this.Target);
+		}
 
-        void OnActiveSelfToggled(bool value)
+		void OnTeleportClicked()
+		{
+			Vector3 pos = this.Target.transform.position;
+			uConsole.RunCommand($"tp {pos.x} {pos.y} {pos.z}");
+		}
+
+		void OnActiveSelfToggled(bool value)
         {
             Target.SetActive(value);
             UpdateGameObjectInfo(false, true);
@@ -295,7 +304,12 @@ namespace UnityExplorer.UI.Widgets
             UIFactory.SetLayoutElement(PathInput.UIRoot, minHeight: 25, minWidth: 100, flexibleWidth: 9999);
             PathInput.Component.lineType = InputField.LineType.MultiLineSubmit;
 
-            ButtonRef copyButton = UIFactory.CreateButton(firstRow, "CopyButton", "Copy to Clipboard", new Color(0.2f, 0.2f, 0.2f, 1));
+			ButtonRef teleportButton = UIFactory.CreateButton(firstRow, "teleportButton", "Teleport", new Color(0.2f, 0.2f, 0.2f, 1));
+			teleportButton.ButtonText.color = Color.yellow;
+			UIFactory.SetLayoutElement(teleportButton.Component.gameObject, minHeight: 25, minWidth: 120);
+			teleportButton.OnClick += OnTeleportClicked;
+
+			ButtonRef copyButton = UIFactory.CreateButton(firstRow, "CopyButton", "Copy to Clipboard", new Color(0.2f, 0.2f, 0.2f, 1));
             copyButton.ButtonText.color = Color.yellow;
             UIFactory.SetLayoutElement(copyButton.Component.gameObject, minHeight: 25, minWidth: 120);
             copyButton.OnClick += OnCopyClicked;

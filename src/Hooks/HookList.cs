@@ -6,85 +6,85 @@ using UniverseLib.UI.Widgets.ScrollView;
 
 namespace UnityExplorer.Hooks
 {
-    public class HookList : ICellPoolDataSource<HookCell>
-    {
-        public int ItemCount => currentHooks.Count;
-        
-        internal static readonly HashSet<string> hookedSignatures = new();
-        internal static readonly OrderedDictionary currentHooks = new();
+	public class HookList : ICellPoolDataSource<HookCell>
+	{
+		public int ItemCount => currentHooks.Count;
 
-        internal static GameObject UIRoot;
-        internal static ScrollPool<HookCell> HooksScrollPool;
+		internal static readonly HashSet<string> hookedSignatures = new();
+		internal static readonly OrderedDictionary currentHooks = new();
 
-        public static void EnableOrDisableHookClicked(int index)
-        {
-            HookInstance hook = (HookInstance)currentHooks[index];
-            hook.TogglePatch();
+		internal static GameObject UIRoot;
+		internal static ScrollPool<HookCell> HooksScrollPool;
 
-            HooksScrollPool.Refresh(true, false);
-        }
+		public static void EnableOrDisableHookClicked(int index)
+		{
+			HookInstance hook = (HookInstance)currentHooks[index];
+			hook.TogglePatch();
 
-        public static void DeleteHookClicked(int index)
-        {
-            HookInstance hook = (HookInstance)currentHooks[index];
+			HooksScrollPool.Refresh(true, false);
+		}
 
-            if (HookCreator.CurrentEditedHook == hook)
-                HookCreator.EditorInputCancel();
+		public static void DeleteHookClicked(int index)
+		{
+			HookInstance hook = (HookInstance)currentHooks[index];
 
-            hook.Unpatch();
-            currentHooks.RemoveAt(index);
-            hookedSignatures.Remove(hook.TargetMethod.FullDescription());
+			if (HookCreator.CurrentEditedHook == hook)
+				HookCreator.EditorInputCancel();
 
-            HooksScrollPool.Refresh(true, false);
-        }
+			hook.Unpatch();
+			currentHooks.RemoveAt(index);
+			hookedSignatures.Remove(hook.TargetMethod.FullDescription());
 
-        public static void EditPatchClicked(int index)
-        {
-            if (HookCreator.PendingGeneric)
-                HookManagerPanel.genericArgsHandler.Cancel();
+			HooksScrollPool.Refresh(true, false);
+		}
 
-            HookManagerPanel.Instance.SetPage(HookManagerPanel.Pages.HookSourceEditor);
-            HookInstance hook = (HookInstance)currentHooks[index];
-            HookCreator.SetEditedHook(hook);
-        }
+		public static void EditPatchClicked(int index)
+		{
+			if (HookCreator.PendingGeneric)
+				HookManagerPanel.genericArgsHandler.Cancel();
 
-        // Set current hook cell
+			HookManagerPanel.Instance.SetPage(HookManagerPanel.Pages.HookSourceEditor);
+			HookInstance hook = (HookInstance)currentHooks[index];
+			HookCreator.SetEditedHook(hook);
+		}
 
-        public void OnCellBorrowed(HookCell cell) { }
+		// Set current hook cell
 
-        public void SetCell(HookCell cell, int index)
-        {
-            if (index >= currentHooks.Count)
-            {
-                cell.Disable();
-                return;
-            }
+		public void OnCellBorrowed(HookCell cell) { }
 
-            cell.CurrentDisplayedIndex = index;
-            HookInstance hook = (HookInstance)currentHooks[index];
+		public void SetCell(HookCell cell, int index)
+		{
+			if (index >= currentHooks.Count)
+			{
+				cell.Disable();
+				return;
+			}
 
-            cell.MethodNameLabel.text = SignatureHighlighter.ParseMethod(hook.TargetMethod);
+			cell.CurrentDisplayedIndex = index;
+			HookInstance hook = (HookInstance)currentHooks[index];
 
-            cell.ToggleActiveButton.ButtonText.text = hook.Enabled ? "On" : "Off";
-            RuntimeHelper.SetColorBlockAuto(cell.ToggleActiveButton.Component,
-                hook.Enabled ? new Color(0.15f, 0.2f, 0.15f) : new Color(0.2f, 0.2f, 0.15f));
-        }
+			cell.MethodNameLabel.text = SignatureHighlighter.ParseMethod(hook.TargetMethod) + " | " + hook.prefer;
 
-        // UI
+			cell.ToggleActiveButton.ButtonText.text = hook.Enabled ? "On" : "Off";
+			RuntimeHelper.SetColorBlockAuto(cell.ToggleActiveButton.Component,
+				hook.Enabled ? new Color(0.15f, 0.2f, 0.15f) : new Color(0.2f, 0.2f, 0.15f));
+		}
 
-        internal void ConstructUI(GameObject leftGroup)
-        {
-            UIRoot = UIFactory.CreateUIObject("CurrentHooksPanel", leftGroup);
-            UIFactory.SetLayoutElement(UIRoot, preferredHeight: 150, flexibleHeight: 0, flexibleWidth: 9999);
-            UIFactory.SetLayoutGroup<VerticalLayoutGroup>(UIRoot, true, true, true, true);
+		// UI
 
-            Text hooksLabel = UIFactory.CreateLabel(UIRoot, "HooksLabel", "Current Hooks", TextAnchor.MiddleCenter);
-            UIFactory.SetLayoutElement(hooksLabel.gameObject, minHeight: 30, flexibleWidth: 9999);
+		internal void ConstructUI(GameObject leftGroup)
+		{
+			UIRoot = UIFactory.CreateUIObject("CurrentHooksPanel", leftGroup);
+			UIFactory.SetLayoutElement(UIRoot, preferredHeight: 150, flexibleHeight: 0, flexibleWidth: 9999);
+			UIFactory.SetLayoutGroup<VerticalLayoutGroup>(UIRoot, true, true, true, true);
 
-            HooksScrollPool = UIFactory.CreateScrollPool<HookCell>(UIRoot, "HooksScrollPool",
-                out GameObject hooksScroll, out GameObject hooksContent);
-            UIFactory.SetLayoutElement(hooksScroll, flexibleHeight: 9999);
-            HooksScrollPool.Initialize(this);
-        }
-    }
+			Text hooksLabel = UIFactory.CreateLabel(UIRoot, "HooksLabel", "Current Hooks", TextAnchor.MiddleCenter);
+			UIFactory.SetLayoutElement(hooksLabel.gameObject, minHeight: 30, flexibleWidth: 9999);
+
+			HooksScrollPool = UIFactory.CreateScrollPool<HookCell>(UIRoot, "HooksScrollPool",
+				out GameObject hooksScroll, out GameObject hooksContent);
+			UIFactory.SetLayoutElement(hooksScroll, flexibleHeight: 9999);
+			HooksScrollPool.Initialize(this);
+		}
+	}
 }

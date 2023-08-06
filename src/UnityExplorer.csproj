@@ -84,11 +84,14 @@
         <DefineConstants>CPP,STANDALONE,UNHOLLOWER</DefineConstants>
         <AssemblyName>UnityExplorer.STANDALONE.IL2CPP</AssemblyName>
     </PropertyGroup>
+    <ItemGroup>
+      <Compile Remove="Tests\TestClass.cs" />
+    </ItemGroup>
 
     <!-- ~~~~~ NUGET ~~~~~ -->
     <ItemGroup>
-        <PackageReference Include="HarmonyX" Version="2.5.2" IncludeAssets="compile" />
-        <PackageReference Include="Samboy063.Tomlet" Version="3.1.3" />
+        <PackageReference Include="Samboy063.Tomlet" Version="5.2.0" />
+        <PackageReference Include="STBlade.Modding.TLD.Il2CppAssemblies.Windows" Version="2.19.0" />
     </ItemGroup>
     <!-- il2cpp nuget -->
     <ItemGroup Condition="'$(Configuration)'=='ML_Cpp_net6' or '$(Configuration)'=='ML_Cpp_net472' or '$(Configuration)'=='STANDALONE_Cpp' or '$(Configuration)'=='BIE_Cpp'">
@@ -101,9 +104,7 @@
         <PackageReference Include="UniverseLib.IL2CPP.Interop" Version="1.5.1" />
     </ItemGroup>
 	<ItemGroup Condition="'$(Configuration)'=='ML_Cpp_net6_interop'">
-		<PackageReference Include="Il2CppInterop.Common" Version="1.0.0" />
-		<PackageReference Include="Il2CppInterop.Runtime" Version="1.0.0" />
-		<PackageReference Include="UniverseLib.IL2CPP.Interop.ML" Version="1.5.1.2" />
+		<PackageReference Include="UniverseLib.IL2CPP.Interop.ML" Version="1.5.4.1" />
 	</ItemGroup>
     <!-- mono nuget -->
     <ItemGroup Condition="'$(Configuration)'=='BIE6_Mono' or '$(Configuration)'=='BIE5_Mono' or '$(Configuration)'=='ML_Mono' or '$(Configuration)'=='STANDALONE_Mono'">
@@ -116,6 +117,7 @@
         <Reference Include="mcs">
             <HintPath>..\lib\net6\mcs.dll</HintPath>
             <Private>True</Private>
+            <EmbedInteropTypes>False</EmbedInteropTypes>
         </Reference>
     </ItemGroup>
     <!-- net35 / net472 -->
@@ -126,12 +128,6 @@
         </Reference>
     </ItemGroup>
     <!-- MelonLoader net6 -->
-    <ItemGroup Condition="'$(Configuration)'=='ML_Cpp_net6' or '$(Configuration)'=='ML_Cpp_net6_interop'">
-        <Reference Include="MelonLoader">
-            <HintPath>..\lib\net6\MelonLoader.dll</HintPath>
-            <Private>False</Private>
-        </Reference>
-    </ItemGroup>
     <!-- MelonLoader net35 -->
     <ItemGroup Condition="'$(Configuration)'=='ML_Mono' or '$(Configuration)'=='ML_Cpp_net472'">
         <Reference Include="MelonLoader">
@@ -222,47 +218,8 @@
             <Private>False</Private>
         </Reference>
     </ItemGroup>
-    <!-- Il2Cpp Interop -->
-    <ItemGroup Condition="'$(Configuration)'=='BIE_Cpp_CoreCLR' or '$(Configuration)'=='ML_Cpp_net6_interop'">
-        <Reference Include="Il2Cppmscorlib">
-            <HintPath>..\lib\interop\Il2Cppmscorlib.dll</HintPath>
-            <Private>False</Private>
-        </Reference>
-        <Reference Include="Il2CppSystem.Core">
-            <HintPath>..\lib\interop\Il2CppSystem.Core.dll</HintPath>
-            <Private>False</Private>
-        </Reference>
-        <Reference Include="UnityEngine">
-            <HintPath>..\lib\interop\UnityEngine.dll</HintPath>
-            <Private>False</Private>
-        </Reference>
-        <Reference Include="UnityEngine.AudioModule">
-            <HintPath>..\lib\interop\UnityEngine.AudioModule.dll</HintPath>
-            <Private>False</Private>
-        </Reference>
-        <Reference Include="UnityEngine.CoreModule">
-            <HintPath>..\lib\interop\UnityEngine.CoreModule.dll</HintPath>
-            <Private>False</Private>
-        </Reference>
-        <Reference Include="UnityEngine.PhysicsModule">
-            <HintPath>..\lib\interop\UnityEngine.PhysicsModule.dll</HintPath>
-            <Private>False</Private>
-        </Reference>
-        <Reference Include="UnityEngine.TextRenderingModule">
-            <HintPath>..\lib\interop\UnityEngine.TextRenderingModule.dll</HintPath>
-            <Private>False</Private>
-        </Reference>
-        <Reference Include="UnityEngine.UI">
-            <HintPath>..\lib\interop\UnityEngine.UI.dll</HintPath>
-            <Private>False</Private>
-        </Reference>
-        <Reference Include="UnityEngine.UIModule">
-            <HintPath>..\lib\interop\UnityEngine.UIModule.dll</HintPath>
-            <Private>False</Private>
-        </Reference>
-        <Reference Include="UnityEngine.IMGUIModule">
-            <HintPath>..\lib\interop\UnityEngine.IMGUIModule.dll</HintPath>
-            <Private>False</Private>
-        </Reference>
+    <ItemGroup>
+      <Folder Include="Tests\" />
     </ItemGroup>
+    <!-- Il2Cpp Interop -->
 </Project>
