@@ -47,7 +47,8 @@ namespace UnityExplorer
 
             Universe.Init(ConfigManager.Startup_Delay_Time.Value, LateInit, Log, new()
             {
-                Disable_EventSystem_Override = ConfigManager.Disable_EventSystem_Override.Value,
+				Unhollowed_Modules_Folder = loader.UnhollowedModulesFolder,
+				Disable_EventSystem_Override = ConfigManager.Disable_EventSystem_Override.Value,
                 Force_Unlock_Mouse = ConfigManager.Force_Unlock_Mouse.Value
             });
 
