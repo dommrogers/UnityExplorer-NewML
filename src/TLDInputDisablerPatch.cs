@@ -5,35 +5,14 @@ using UnityExplorer.UI;
 
 namespace UnityEplorer
 {
-    [HarmonyLib.HarmonyPatch(typeof(InputManager), "ProcessInput", new Type[] { typeof(MonoBehaviour) })]
-    public class gameInputDisablerPatch
+    [HarmonyLib.HarmonyPatch(typeof(InterfaceManager), "ShouldEnableMousePointer")]
+    public class CursorPatch
     {
-        public static bool Prefix(ref InputManager __instance, ref MonoBehaviour context)
+        public static void Postfix(InterfaceManager __instance, ref bool __result)
         {
-            return !UIManager.ShowMenu;
-        }
-    }
-
-    [HarmonyLib.HarmonyPatch(typeof(InputManager), "GetCameraMovementMouse", new Type[] { typeof(MonoBehaviour) })]
-    public class gameMouseInputDisablerPatch2
-    {
-        public static void Postfix(ref InputManager __instance, ref MonoBehaviour context, ref Vector2 __result)
-        {
-            if (UIManager.ShowMenu)
+            if (TLDInputDisabler.isLocked)
             {
-                __result = Vector2.zero;
-            }
-        }
-    }
-
-    [HarmonyLib.HarmonyPatch(typeof(InputManager), "GetPlayerMovement", new Type[] { typeof(MonoBehaviour) })]
-    public class gameMovementInputDisablerPatch2
-    {
-        public static void Postfix(ref InputManager __instance, ref MonoBehaviour context, ref Vector2 __result)
-        {
-            if (UIManager.ShowMenu)
-            {
-                __result = Vector2.zero;
+                __result = true;
             }
         }
     }

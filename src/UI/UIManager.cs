@@ -1,4 +1,5 @@
-﻿using UnityExplorer.Config;
+﻿using UnityEplorer;
+using UnityExplorer.Config;
 using UnityExplorer.CSConsole;
 using UnityExplorer.Inspectors;
 using UnityExplorer.UI.Panels;
@@ -202,6 +203,7 @@ namespace UnityExplorer.UI
         private static void OnCloseButtonClicked()
         {
             ShowMenu = false;
+            TLDInputDisabler.LockPosition(false);
         }
 
         private static void Master_Toggle_OnValueChanged(KeyCode val)

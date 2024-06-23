@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using MelonLoader;
+using MelonLoader.Utils;
 using UnityExplorer;
 using UnityExplorer.Config;
 using UnityExplorer.Loader.ML;
@@ -14,17 +15,17 @@ using UnityExplorer.Loader.ML;
 
 [assembly: MelonInfo(typeof(ExplorerMelonMod), ExplorerCore.NAME, ExplorerCore.VERSION, ExplorerCore.AUTHOR)]
 [assembly: MelonGame(null, null)]
-[assembly: MelonColor(ConsoleColor.DarkCyan)]
+[assembly: MelonColor(0, 255, 255, 255)]
 
 namespace UnityExplorer
 {
     public class ExplorerMelonMod : MelonMod, IExplorerLoader
     {
         public string ExplorerFolderName => ExplorerCore.DEFAULT_EXPLORER_FOLDER_NAME;
-        public string ExplorerFolderDestination => MelonHandler.ModsDirectory;
+        public string ExplorerFolderDestination => MelonEnvironment.ModsDirectory;
 
         public string UnhollowedModulesFolder => Path.Combine(
-            Path.GetDirectoryName(MelonHandler.ModsDirectory),
+            Path.GetDirectoryName(MelonEnvironment.ModsDirectory),
             Path.Combine("MelonLoader", "Il2CppAssemblies"));
 
         public ConfigHandler ConfigHandler => _configHandler;
@@ -34,7 +35,7 @@ namespace UnityExplorer
         public Action<object> OnLogWarning => LoggerInstance.Warning;
         public Action<object> OnLogError   => LoggerInstance.Error;
 
-        public override void OnApplicationStart()
+        public override void OnInitializeMelon()
         {
             _configHandler = new MelonLoaderConfigHandler();
             ExplorerCore.Init(this);

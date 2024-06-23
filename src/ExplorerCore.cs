@@ -7,6 +7,7 @@ global using UnityEngine;
 global using UnityEngine.UI;
 global using UniverseLib;
 global using UniverseLib.Utility;
+using UnityEplorer;
 using UnityExplorer.Config;
 using UnityExplorer.ObjectExplorer;
 using UnityExplorer.Runtime;
@@ -19,7 +20,7 @@ namespace UnityExplorer
     public static class ExplorerCore
     {
         public const string NAME = "UnityExplorer";
-        public const string VERSION = "5.0.1";
+        public const string VERSION = "5.0.3";
         public const string AUTHOR = "STBlade";
         public const string GUID = "com.stblade.unityexplorer";
 
@@ -79,6 +80,7 @@ namespace UnityExplorer
             if (InputManager.GetKeyDown(ConfigManager.Master_Toggle.Value))
             {
                 UIManager.ShowMenu = !UIManager.ShowMenu;
+                TLDInputDisabler.ToggleLock();
             }
         }
 
